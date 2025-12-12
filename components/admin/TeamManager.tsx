@@ -10,7 +10,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { Loader2, Plus, Pencil, Trash2, UserCircle, Image as ImageIcon } from "lucide-react"
+import { Loader2, Plus, Pencil, Trash2, UserCircle } from "lucide-react"
+import { ImageUpload } from "@/components/admin/ImageUpload"
 
 type TeamMember = {
   id: string
@@ -227,15 +228,12 @@ export function TeamManager() {
                 </Select>
               </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="image">Profile Image URL</Label>
-              <Input
-                id="image"
-                value={currentMember.image_url || ''}
-                onChange={(e) => setCurrentMember({ ...currentMember, image_url: e.target.value })}
-                placeholder="https://..."
-              />
-            </div>
+            <ImageUpload
+              value={currentMember.image_url}
+              onChange={(url) => setCurrentMember({ ...currentMember, image_url: url })}
+              folder="bandipur/team"
+              label="Profile Image"
+            />
             <div className="grid grid-cols-2 gap-4">
                <div className="grid gap-2">
                 <Label htmlFor="linkedin">LinkedIn URL (Optional)</Label>

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 export function Footer() {
   const pathname = usePathname()
 
-  if (pathname === "/admin/login") return null
+  if (pathname?.startsWith("/admin")) return null
 
   return (
     <footer className="w-full bg-background text-foreground">

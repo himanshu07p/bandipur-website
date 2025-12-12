@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { Loader2, Plus, Pencil, Trash2, Users, Image as ImageIcon } from "lucide-react"
+import { ImageUpload } from "@/components/admin/ImageUpload"
 
 type Club = {
   id: string
@@ -211,15 +212,12 @@ export function ClubsManager() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                value={currentClub.image_url || ''}
-                onChange={(e) => setCurrentClub({ ...currentClub, image_url: e.target.value })}
-                placeholder="Logo or Banner URL"
-              />
-            </div>
+            <ImageUpload
+              value={currentClub.image_url}
+              onChange={(url) => setCurrentClub({ ...currentClub, image_url: url })}
+              folder="bandipur/clubs"
+              label="Logo / Banner Image"
+            />
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="sec_name">Secretary/Lead Name</Label>

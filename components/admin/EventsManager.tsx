@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { Loader2, Plus, Pencil, Trash2, Calendar as CalendarIcon, MapPin, Link as LinkIcon, Image as ImageIcon } from "lucide-react"
 import { format } from "date-fns"
+import { ImageUpload } from "@/components/admin/ImageUpload"
 
 type Event = {
   id: string
@@ -255,15 +256,12 @@ export function EventsManager() {
                 placeholder="https://..."
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="poster">Poster URL</Label>
-              <Input
-                id="poster"
-                value={currentEvent.poster_url || ''}
-                onChange={(e) => setCurrentEvent({ ...currentEvent, poster_url: e.target.value })}
-                placeholder="Image URL"
-              />
-            </div>
+            <ImageUpload
+              value={currentEvent.poster_url}
+              onChange={(url) => setCurrentEvent({ ...currentEvent, poster_url: url })}
+              folder="bandipur/events"
+              label="Event Poster"
+            />
             <div className="grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
