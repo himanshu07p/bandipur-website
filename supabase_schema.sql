@@ -65,7 +65,7 @@ create table public.team_members (
   id uuid not null default gen_random_uuid(),
   name text not null,
   position text not null,
-  category text check (category in ('Core', 'Lead', 'Member', 'Alumni')) default 'Member',
+  category text check (category in ('UHC', 'LHC', 'WebOps')) default 'WebOps',
   image_url text,
   linkedin_url text,
   email text,
