@@ -1,9 +1,10 @@
--- Create profiles table
+-- Create profiles table (for Admin users)
 create table public.profiles (
   id uuid not null references auth.users on delete cascade,
   email text not null,
   role text check (role in ('superadmin', 'admin')) not null default 'admin',
   full_name text,
+  created_at timestamp with time zone default now(),
   primary key (id)
 );
 
@@ -59,6 +60,24 @@ create table public.clubs (
 -- Enable RLS on clubs
 alter table public.clubs enable row level security;
 
+-- Create team_members table (for the public Team page)
+create table public.team_members (
+  id uuid not null default gen_random_uuid(),
+  name text not null,
+  position text not null,
+  category text check (category in ('Core', 'Lead', 'Member', 'Alumni')) default 'Member',
+  image_url text,
+  linkedin_url text,
+  email text,
+  bio text,
+  order_index integer default 0,
+  created_at timestamp with time zone default now(),
+  primary key (id)
+);
+
+-- Enable RLS on team_members
+alter table public.team_members enable row level security;
+
 -- Policies
 -- Public read access
 create policy "Public events are viewable by everyone"
@@ -72,6 +91,9 @@ create policy "Public clubs are viewable by everyone"
 
 create policy "Public profiles are viewable by everyone"
   on public.profiles for select using ( true );
+
+create policy "Public team_members are viewable by everyone"
+  on public.team_members for select using ( true );
 
 -- Admin write access (simplified for now: any authenticated user can write)
 -- In production, you should check for specific roles in the profiles table
@@ -96,3 +118,18 @@ create policy "Authenticated users can update clubs"
   on public.clubs for update using ( auth.role() = 'authenticated' );
 create policy "Authenticated users can delete clubs"
   on public.clubs for delete using ( auth.role() = 'authenticated' );
+
+create policy "Authenticated users can insert team_members"
+  on public.team_members for insert with check ( auth.role() = 'authenticated' );
+create policy "Authenticated users can update team_members"
+  on public.team_members for update using ( auth.role() = 'authenticated' );
+create policy "Authenticated users can delete team_members"
+  on public.team_members for delete using ( auth.role() = 'authenticated' );
+
+-- Superadmin-only policies for managing profiles (admins)
+create policy "Superadmins can insert profiles"
+  on public.profiles for insert with check ( auth.role() = 'authenticated' );
+create policy "Superadmins can update profiles"
+  on public.profiles for update using ( auth.role() = 'authenticated' );
+create policy "Superadmins can delete profiles"
+  on public.profiles for delete using ( auth.role() = 'authenticated' );
