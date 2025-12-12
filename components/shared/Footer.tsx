@@ -105,6 +105,13 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Large Footer Text */}
+      <div className="w-full border-y-2 border-foreground/20 py-12 md:py-24 flex items-center justify-center overflow-hidden px-4">
+           <h1 className="text-[9vw] font-sans font-bold tracking-tighter text-foreground/90 leading-[0.8] text-center whitespace-nowrap">
+              THE HOUSE OF MOTION
+           </h1>
+      </div>
+
       {/* Bottom Bar */}
       <div className="py-6 text-center bg-background">
         <p className="text-[10px] text-muted-foreground font-sans uppercase tracking-widest">

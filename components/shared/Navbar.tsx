@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -42,11 +42,9 @@ export function Navbar() {
               {item.name}
             </Link>
           ))}
-          {pathname !== "/admin/login" && (
-            <Button variant="outline" className="border-black/20 text-black hover:bg-black hover:text-white" asChild>
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-          )}
+          <Button variant="outline" className="border-black/20 text-black hover:bg-black hover:text-white" asChild>
+            <Link href="/contact">Contact Us</Link>
+          </Button>
         </div>
 
         {/* Mobile Nav */}
@@ -63,6 +61,7 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="top" className="w-full h-screen bg-zinc-950/98 border-none text-white flex flex-col items-center justify-center p-0 [&>button[class*='absolute']]:hidden">
+              <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
               {/* Custom Close Button (same position as trigger) */}
               <div className="absolute top-4 right-4 container flex justify-end">
                  <Button variant="ghost" size="icon" className="relative h-10 w-10 p-0 hover:bg-transparent text-white" onClick={() => setIsOpen(false)}>

@@ -1,34 +1,23 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
 
-const RAW_EVENTS = [
-  {
-    title: "Tech Summit",
-    status: "Upcoming",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "AI Workshop",
-    status: "Upcoming",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Music Fest",
-    status: "Completed",
-    image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    title: "Sports Meet",
-    status: "Completed",
-    image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=80"
-  }
-];
+export const dynamic = 'force-dynamic'
 
-// Duplicate events enough times to ensure they cover even large screens before the marquee duplication logic kicks in
-const EVENTS = [...RAW_EVENTS, ...RAW_EVENTS, ...RAW_EVENTS, ...RAW_EVENTS];
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: rawEvents } = await supabase.from('events').select('title, status, poster_url').eq('status', 'Upcoming').order('event_date', { ascending: true }).limit(5)
+  
+  // Fallback if no events
+  const displayEvents = rawEvents && rawEvents.length > 0 ? rawEvents : [
+    { title: "No Upcoming Events", status: "Stay Tuned", poster_url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80" }
+  ]
 
-export default function Home() {
+  // Duplicate events enough times to ensure they cover even large screens before the marquee duplication logic kicks in
+  // We need a critical mass of items for the marquee to look good.
+  const EVENTS = [...displayEvents, ...displayEvents, ...displayEvents, ...displayEvents].slice(0, 12); 
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground selection:bg-primary/20 overflow-x-hidden">
       {/* Quote Section (Moved Above Hero) */}
@@ -51,7 +40,7 @@ export default function Home() {
               {EVENTS.map((event, i) => (
                 <div key={`${setIndex}-${i}`} className="relative w-[250px] h-[300px] rounded-lg overflow-hidden bg-muted group transition-transform duration-500 group-hover/marquee:scale-95 mr-4 shrink-0">
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                  <img src={event.image} alt={event.title} className="absolute inset-0 w-full h-full object-cover" />
+                  <img src={event.poster_url || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80"} alt={event.title} className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute bottom-4 left-4 z-20">
                     <span className={`text-xs font-sans uppercase tracking-widest px-2 py-1 rounded-sm shadow-sm ${event.status === 'Upcoming' ? 'bg-white text-black' : 'bg-black text-white'}`}>
                       {event.status}
