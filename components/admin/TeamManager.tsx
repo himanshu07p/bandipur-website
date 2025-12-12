@@ -16,7 +16,7 @@ type TeamMember = {
   id: string
   name: string
   position: string
-  category: 'Core' | 'Lead' | 'Member' | 'Alumni'
+  category: 'UHC' | 'LHC' | 'WebOps'
   image_url: string | null
   linkedin_url: string | null
   email: string | null
@@ -102,7 +102,7 @@ export function TeamManager() {
 
   const openNewMember = () => {
     setCurrentMember({
-      category: 'Member',
+      category: 'WebOps',
       order_index: members.length
     })
     setIsEditing(false)
@@ -150,12 +150,11 @@ export function TeamManager() {
                 )}
                 <div className="absolute top-2 right-2">
                    <span className={`px-2 py-1 text-xs font-bold rounded shadow-sm backdrop-blur-sm border border-white/20 ${
-                     member.category === 'Core' ? 'bg-primary/80 text-primary-foreground' :
-                     member.category === 'Lead' ? 'bg-blue-500/80 text-white' :
-                     member.category === 'Alumni' ? 'bg-yellow-500/80 text-black' :
+                     member.category === 'UHC' ? 'bg-primary/80 text-primary-foreground' :
+                     member.category === 'LHC' ? 'bg-blue-500/80 text-white' :
                      'bg-black/50 text-white'
                    }`}>
-                    {member.category}
+                    {member.category === 'UHC' ? 'Upper House' : member.category === 'LHC' ? 'Lower House' : member.category}
                   </span>
                 </div>
               </div>
@@ -214,17 +213,16 @@ export function TeamManager() {
               <div className="grid gap-2">
                 <Label htmlFor="category">Category</Label>
                 <Select
-                  value={currentMember.category || 'Member'}
+                  value={currentMember.category || 'WebOps'}
                   onValueChange={(val: any) => setCurrentMember({ ...currentMember, category: val })}
                 >
                   <SelectTrigger id="category">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Core">Core Team</SelectItem>
-                    <SelectItem value="Lead">Club/Committee Lead</SelectItem>
-                    <SelectItem value="Member">Member</SelectItem>
-                    <SelectItem value="Alumni">Alumni</SelectItem>
+                    <SelectItem value="UHC">Upper House Council</SelectItem>
+                    <SelectItem value="LHC">Lower House Council</SelectItem>
+                    <SelectItem value="WebOps">Web Ops Team</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
